@@ -1,6 +1,5 @@
-package com.wipro.users.repository;
+package com.wipro.domain.users;
 
-import com.wipro.users.repository.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

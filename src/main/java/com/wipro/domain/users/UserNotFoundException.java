@@ -1,4 +1,4 @@
-package com.wipro.users.repository;
+package com.wipro.domain.users;
 
 class UserNotFoundException extends RuntimeException {
 

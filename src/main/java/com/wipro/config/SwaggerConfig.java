@@ -1,4 +1,4 @@
-package com.wipro.users.config;
+package com.wipro.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,6 +1,6 @@
-package com.wipro.users.repository;
+package com.wipro.domain.users;
 
-import com.wipro.users.entity.User;
+import com.wipro.domain.users.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 

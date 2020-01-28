@@ -1,4 +1,4 @@
-package com.wipro.users;
+package com.wipro;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

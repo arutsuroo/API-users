@@ -1,4 +1,4 @@
-package com.wipro.users.entity;
+package com.wipro.domain.users;
 
 import lombok.Data;
 
