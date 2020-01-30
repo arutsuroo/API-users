@@ -17,7 +17,7 @@ public class UserCreateRestController {
     private UserRepository repository;
 
     @PostMapping("/users")
-    User newUser(@RequestBody User newUser) {
+    public User newUser(@RequestBody User newUser) {
         return repository.save(newUser);
     }
 

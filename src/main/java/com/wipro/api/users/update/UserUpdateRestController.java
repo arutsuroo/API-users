@@ -17,22 +17,13 @@ public class UserUpdateRestController {
     private UserRepository repository;
 
     @PutMapping("/users/{id}")
-    User replaceUser(@RequestBody User newUser, @PathVariable Long id) {
-        Optional<User> savedUser = repository.findById(id);
-        if(savedUser.isPresent()){
+    User replaceUser(@RequestBody UserUpdateDTO newUser, @PathVariable Long id) {
+            Optional<User> savedUser = repository.findById(id);
             User user = savedUser.get();
-            user.setUserName(newUser.getUserName());
-            user.setFirstName(newUser.getFirstName());
-            user.setLastName(newUser.getLastName());
-            user.setBirthDate(newUser.getBirthDate());
             user.setEmail(newUser.getEmail());
             return repository.save(user);
-        }
-        else {
-            newUser.setId(id);
-            return repository.save(newUser);
         }
     }
 
 
-}
+

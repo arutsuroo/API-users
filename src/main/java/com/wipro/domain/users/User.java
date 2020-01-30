@@ -3,26 +3,35 @@ package com.wipro.domain.users;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
 @Entity
 public class User {
 
-    private @Id @GeneratedValue Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @Column
     private String userName;
+
+    @Column
     private String firstName;
+
+    @Column
     private String lastName;
 
-    @Temporal(TemporalType.DATE)
-    private Date birthDate;
+   @Column
+    private LocalDate birthDate;
+
+   @Column
     private String email;
 
-    public User() {
+    public User() {}
 
-    }
-
-    public User(String userName, String firstName, String lastName, Date birthDate, String email) {
+    public User(String userName, String firstName, String lastName, LocalDate birthDate, String email) {
         this.userName = userName;
         this.firstName = firstName;
         this.lastName = lastName;
