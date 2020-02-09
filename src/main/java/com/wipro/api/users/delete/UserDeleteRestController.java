@@ -1,18 +1,23 @@
 package com.wipro.api.users.delete;
 
-import com.wipro.domain.users.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping(value = "/users")
 public class UserDeleteRestController {
 
-    private UserRepository repository;
+    @Autowired
+    private UserDeleteService service;
 
-    @DeleteMapping("/users/{id}")
-    void deleteUser(@PathVariable Long id) {
-        repository.deleteById(id);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id){
+        service.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

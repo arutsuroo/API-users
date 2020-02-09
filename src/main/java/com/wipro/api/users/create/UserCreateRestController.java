@@ -1,24 +1,26 @@
 package com.wipro.api.users.create;
 
 import com.wipro.domain.users.User;
-import com.wipro.domain.users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.util.List;
+import java.net.URI;
 
 @RestController
+@RequestMapping(value = "/users")
 public class UserCreateRestController {
 
     @Autowired
-    private UserRepository repository;
+    private UserCreateSevice service;
 
-    @PostMapping("/users")
-    public User newUser(@RequestBody User newUser) {
-        return repository.save(newUser);
+    @PostMapping
+    public ResponseEntity<User> insert(@RequestBody User obj){
+        obj = service.insert(obj);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(obj.getId()).toUri();
+        return ResponseEntity.created(uri).body(obj);
     }
 
 }

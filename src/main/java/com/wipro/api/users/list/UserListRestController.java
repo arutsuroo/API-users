@@ -1,21 +1,24 @@
 package com.wipro.api.users.list;
 
 import com.wipro.domain.users.User;
-import com.wipro.domain.users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
+@RequestMapping(value = "/users")
 public class UserListRestController {
 
     @Autowired
-    private UserRepository repository;
+    private UserListService service;
 
-    @GetMapping("/users")
-    List<User> all() {
-        return repository.findAll();
+    @GetMapping
+    public ResponseEntity<List<User>> findAll() {
+        List<User> list = service.findAll();
+        return ResponseEntity.ok().body(list);
     }
 }

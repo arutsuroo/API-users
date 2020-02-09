@@ -30,7 +30,7 @@ class UsersApplicationTests {
 		User user = new User("userName", "firstName",
 				"lastName", LocalDate.of(2020, 12, 05), "email");
 		Assert.assertNull("User Id should be null", user.getId());
-		createRestController.newUser(user);
+		createRestController.insert(user);
 		Assert.assertNotNull("User Id should be not null", user.getId());
 	}
 
