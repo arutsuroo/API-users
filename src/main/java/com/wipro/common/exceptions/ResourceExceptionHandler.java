@@ -1,4 +1,4 @@
-package com.wipro.api.users.exceptions;
+package com.wipro.common.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,7 +1,7 @@
 package com.wipro.api.users.delete;
 
-import com.wipro.api.users.exceptions.DatabaseException;
-import com.wipro.api.users.exceptions.ResourceNotFoundException;
+import com.wipro.common.exceptions.DatabaseException;
+import com.wipro.common.exceptions.ResourceNotFoundException;
 import com.wipro.domain.users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;

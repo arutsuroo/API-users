@@ -1,4 +1,4 @@
-package com.wipro.api.users.exceptions;
+package com.wipro.common.exceptions;
 
 public class ResourceNotFoundException extends RuntimeException {
 

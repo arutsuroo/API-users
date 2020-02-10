@@ -1,6 +1,6 @@
 package com.wipro.api.users.detail;
 
-import com.wipro.api.users.exceptions.ResourceNotFoundException;
+import com.wipro.common.exceptions.ResourceNotFoundException;
 import com.wipro.domain.users.User;
 import com.wipro.domain.users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

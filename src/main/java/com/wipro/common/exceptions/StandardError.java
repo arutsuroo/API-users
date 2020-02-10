@@ -1,4 +1,4 @@
-package com.wipro.api.users.exceptions;
+package com.wipro.common.exceptions;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
