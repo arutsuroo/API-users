@@ -1,5 +1,7 @@
 package com.wipro.api.users.common;
 
+import com.wipro.domain.role.Role;
+
 import java.time.LocalDate;
 
 
@@ -15,11 +17,11 @@ public class UsersDto {
 
     private String email;
 
-    private String roles;
+    private Role roles;
 
     public UsersDto() {}
 
-    public UsersDto(String userName, String firstName, String lastName, LocalDate birthDate, String email, String roles) {
+    public UsersDto(String userName, String firstName, String lastName, LocalDate birthDate, String email, Role roles) {
         this.userName = userName;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -68,11 +70,11 @@ public class UsersDto {
         this.email = email;
     }
 
-    public String getRoles() {
+    public Role getRoles() {
         return roles;
     }
 
-    public void setRoles(String roles) {
+    public void setRoles(Role roles) {
         this.roles = roles;
     }
 }

@@ -1,6 +1,5 @@
 package com.wipro.api.users.detail;
 
-import com.wipro.api.users.common.UsersDto;
 import com.wipro.domain.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

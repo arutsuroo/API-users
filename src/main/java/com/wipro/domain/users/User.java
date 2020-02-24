@@ -36,17 +36,18 @@ public class User {
     @NotNull
     private String email;
 
-    @NotNull
+    @OneToOne
     private Role roles;
 
-    protected User() {}
+    public User() {}
 
-    public User(String userName, String firstName, String lastName, LocalDate birthDate, String email) {
+    public User(String userName, String firstName, String lastName, LocalDate birthDate, String email, Role roles) {
         this.userName = userName;
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthDate = birthDate;
         this.email = email;
+        this.roles = roles;
     }
 
     public Long getId() {
@@ -95,6 +96,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Role getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Role roles) {
+        this.roles = roles;
     }
 
     @Override
