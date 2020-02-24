@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 
 @Service
-public class UserUpdateService {
+public class UsersUpdateService {
 
     @Autowired
     private UserRepository repository;

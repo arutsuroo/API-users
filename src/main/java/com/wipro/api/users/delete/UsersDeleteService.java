@@ -9,7 +9,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserDeleteService {
+public class UsersDeleteService {
 
     @Autowired
     private UserRepository repository;

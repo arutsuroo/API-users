@@ -1,5 +1,6 @@
 package com.wipro.api.users.detail;
 
+import com.wipro.api.users.common.UsersDto;
 import com.wipro.common.exceptions.ResourceNotFoundException;
 import com.wipro.domain.users.User;
 import com.wipro.domain.users.UserRepository;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class UserDetailService {
+public class UsersDetailService {
 
     @Autowired
     private UserRepository repository;

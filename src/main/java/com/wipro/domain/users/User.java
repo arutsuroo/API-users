@@ -1,36 +1,45 @@
 package com.wipro.domain.users;
 
-import lombok.Data;
+import com.wipro.domain.role.Role;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
-import java.io.Serializable;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
-import java.util.Date;
 
-@Data
+@ApiModel(description = "All details about the user.")
 @Entity
-public class User implements Serializable {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column
+    @Size(min = 2, message = "Name should be at least 2 characters")
+    @ApiModelProperty(notes = "Name should have at least 2 characters.")
     private String userName;
 
-    @Column
+    @NotNull
     private String firstName;
 
-    @Column
+    @NotNull
     private String lastName;
 
-   @Column
+    @NotNull
+    @Past
+    @ApiModelProperty(notes = "Birth date should be in the past")
     private LocalDate birthDate;
 
-   @Column
+    @NotNull
     private String email;
 
-    public User() {}
+    @NotNull
+    private Role roles;
+
+    protected User() {}
 
     public User(String userName, String firstName, String lastName, LocalDate birthDate, String email) {
         this.userName = userName;
@@ -38,5 +47,59 @@ public class User implements Serializable {
         this.lastName = lastName;
         this.birthDate = birthDate;
         this.email = email;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public LocalDate getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    @Override
+    public String toString() {
+        String name = firstName + " " + lastName;
+        return String.format("User [id=%s, name=%s, birthDate=%s]", id, name, birthDate);
     }
 }

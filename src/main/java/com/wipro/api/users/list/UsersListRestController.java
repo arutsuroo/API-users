@@ -11,10 +11,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/users")
-public class UserListRestController {
+public class UsersListRestController {
 
     @Autowired
-    private UserListService service;
+    private UsersListService service;
 
     @GetMapping
     public ResponseEntity<List<User>> findAll() {

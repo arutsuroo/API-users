@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class UserCreateSevice {
+public class UsersCreateSevice {
 
     @Autowired
     private UserRepository repository;

@@ -1,5 +1,6 @@
 package com.wipro.api.users.detail;
 
+import com.wipro.api.users.common.UsersDto;
 import com.wipro.domain.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -8,14 +9,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
 @RestController
 @RequestMapping("/users")
-public class UserDetailRestController {
+public class UsersDetailRestController {
 
     @Autowired
-    private UserDetailService service;
+    private UsersDetailService service;
 
-    @GetMapping(value = "/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<User> findById(@PathVariable Long id) {
         User obj = service.findById(id);
         return ResponseEntity.ok().body(obj);
