@@ -20,6 +20,7 @@ public class User {
 
     @Size(min = 2, message = "Name should be at least 2 characters")
     @ApiModelProperty(notes = "Name should have at least 2 characters.")
+    @NotNull
     private String userName;
 
     @NotNull
@@ -36,7 +37,7 @@ public class User {
     @NotNull
     private String email;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     private Role roles;
 
     public User() {}

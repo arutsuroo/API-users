@@ -1,15 +1,19 @@
 package com.wipro.users;
 
+import com.wipro.api.users.common.UsersDto;
+import com.wipro.api.users.common.UsersMapper.UsersMapper;
 import com.wipro.api.users.create.UsersCreateRestController;
-import com.wipro.domain.users.User;
-import org.junit.Assert;
+import com.wipro.api.users.update.UsersUpdateRestController;
+import com.wipro.domain.role.Role;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.persistence.RollbackException;
 import java.time.LocalDate;
+import static org.assertj.core.api.Assertions.*;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
@@ -18,19 +22,35 @@ class UsersApplicationTests {
 	@Autowired
 	private UsersCreateRestController createRestController;
 
-//	@Test
-//	void contextLoads() {
-//		User user = new User("userName", "firstName",
-//				"lastName", LocalDate.of(2020, 12, 05), "email");
-//		Assert.assertNull("User Id should be null", user.getId());
-//		createRestController.insert(user);
-//		Assert.assertNotNull("User Id should be not null", user.getId());
-//	}
+	@Autowired
+	private UsersUpdateRestController updateRestController;
+
+	@Autowired
+	private UsersMapper usersMapper;
 
 	@Test
-	void userList() {
-
+	public void insertUser() {
+		UsersDto user = new UsersDto("theDoctor", "John", "Smith", LocalDate.of(2020, 01, 12), "doctor@tardis.com", null);
+		createRestController.insert(user);
+		assertThat(user).isNotNull();
 	}
+
+	@Test
+	public void updateUserEmail(){
+		UsersDto user = new UsersDto("theDoctor", "John", "Smith", LocalDate.of(2020, 01, 12), "doctor@tardis.com", null);
+		String email = user.getEmail();
+		createRestController.insert(user);
+		user.setEmail("rogerinho2012@gmail.com");
+		updateRestController.update(1L, usersMapper.fromDto(user));
+		String updated_email = user.getEmail();
+		assertThat(email).isNotEqualTo(updated_email);
+	}
+
+//	@Test
+//	void insertUserWithMissingValues() {
+//		assertThatThrownBy(()->{UsersDto user = new UsersDto("theDoctor", "John", "Smith", LocalDate.of(2020, 01, 12), "doctor@tardis.com", null);
+//			createRestController.insert(user);}).isInstanceOf(RollbackException.class).hasMessageContaining("Could not commit JPA transaction; nested exception is javax.persistence.RollbackException: Error while committing the transaction");
+//	}
 
 
 }

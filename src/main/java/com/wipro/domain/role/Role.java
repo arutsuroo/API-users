@@ -15,9 +15,9 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
     @Size(min = 2, message = "Role name should be at least 2 characters")
     @ApiModelProperty(notes = "Role name should have at least 2 characters.")
+    @NotNull
     private String name;
 
     public Long getId() {

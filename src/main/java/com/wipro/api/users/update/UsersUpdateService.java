@@ -15,14 +15,10 @@ public class UsersUpdateService {
     private UserRepository repository;
 
     public User update(Long id, User obj) {
-        try {
-            User entity = repository.getOne(id);
-            updateData(entity, obj);
-            return repository.save(entity);
-        }
-        catch (EntityNotFoundException e){
-            throw new ResourceNotFoundException(id);
-        }
+        User entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
+        updateData(entity, obj);
+        return repository.save(entity);
+
     }
 
     public void updateData(User entity, User obj){
