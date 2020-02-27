@@ -1,5 +1,7 @@
 package com.wipro.api.users.detail;
 
+import com.wipro.api.users.common.UsersDto;
+import com.wipro.api.users.common.UsersMapper.UsersMapper;
 import com.wipro.domain.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +18,14 @@ public class UsersDetailRestController {
     @Autowired
     private UsersDetailService service;
 
+    @Autowired
+    private UsersMapper usersMapper;
+
     @GetMapping("/{id}")
-    public ResponseEntity<User> findById(@PathVariable Long id) {
+    public ResponseEntity<UsersDto> findById(@PathVariable Long id) {
         User obj = service.findById(id);
-        return ResponseEntity.ok().body(obj);
+        UsersDto response = usersMapper.toUserDto(obj);
+        return ResponseEntity.ok().body(response);
     }
 
 }
