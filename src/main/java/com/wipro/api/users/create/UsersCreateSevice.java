@@ -1,5 +1,7 @@
 package com.wipro.api.users.create;
 
+import com.wipro.api.roles.detail.RoleDetailService;
+import com.wipro.domain.role.Role;
 import com.wipro.domain.users.User;
 import com.wipro.domain.users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +13,12 @@ public class UsersCreateSevice {
     @Autowired
     private UserRepository repository;
 
-    public User insert(User obj){
+    @Autowired
+    RoleDetailService service;
+
+    public User insert(User obj, long idRole){
+        Role role = service.findById(idRole);
+        obj.setRoles(role);
         return repository.save(obj);
     }
 

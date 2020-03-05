@@ -16,9 +16,6 @@ public class UsersDeleteRestController {
     @Autowired
     private UsersDeleteService service;
 
-    @Autowired
-    private UsersMapper usersMapper;
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id){
         service.delete(id);

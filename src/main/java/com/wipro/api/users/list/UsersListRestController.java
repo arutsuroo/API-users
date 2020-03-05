@@ -1,7 +1,5 @@
 package com.wipro.api.users.list;
 
-import com.wipro.api.users.common.UsersDto;
-import com.wipro.api.users.common.UsersMapper.UsersMapper;
 import com.wipro.domain.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,15 +18,16 @@ public class UsersListRestController {
     private UsersListService service;
 
     @Autowired
-    private UsersMapper usersMapper;
+    private UsersListMapper usersMapper;
 
     @GetMapping
-    public ResponseEntity<List<User>> findAll() {
-        List<User> list = new ArrayList<User>();
-        for (User user : list){
-            usersMapper.toUserDto(user);
-        }
+    public ResponseEntity<List<UsersListResponse>> findAll() {
+        List<User> list;
+        List<UsersListResponse> response = new ArrayList<>();
         list = service.findAll();
-        return ResponseEntity.ok().body(list);
+        for (User user : list){
+            response.add(usersMapper.toUsersDto(user));
+        }
+        return ResponseEntity.ok().body(response);
     }
 }

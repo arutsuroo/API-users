@@ -1,6 +1,8 @@
 package com.wipro.api.users.update;
 
-import com.wipro.api.users.common.UsersDto;
+import lombok.Data;
 
-public class UsersUpdateResponse extends UsersDto {
+@Data
+public class UsersUpdateResponse {
+    private Long id;
 }

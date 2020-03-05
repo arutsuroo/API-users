@@ -1,6 +1,9 @@
 package com.wipro.api.users.create;
 
-import com.wipro.api.users.common.UsersDto;
+import lombok.Data;
 
-public class UsersCreateResponse extends UsersDto {
+@Data
+public class UsersCreateResponse {
+
+    private Long id;
 }

@@ -12,10 +12,14 @@ public class RoleUpdateController {
     @Autowired
     private RoleUpdateService service;
 
+    @Autowired
+    private RoleUpdateMapper mapper;
+
     @PutMapping("/{id}")
-    public ResponseEntity<Role> update(@PathVariable("id") Long id, @RequestBody Role obj){
-        obj = service.update(id, obj);
-        return ResponseEntity.ok().body(obj);
+    public ResponseEntity<RoleUpdateResponse> update(@PathVariable("id") Long id, @RequestBody RoleUpdateRequest obj){
+        Role role = service.update(id, mapper.toRoles(obj));
+        RoleUpdateResponse response = mapper.toRolesDto(role);
+        return ResponseEntity.ok().body(response);
     }
 
 }

@@ -15,9 +15,13 @@ public class RoleDetailController {
     @Autowired
     private RoleDetailService service;
 
+    @Autowired
+    private RoleDetailMapper mapper;
+
     @GetMapping("/{id}")
-    public ResponseEntity<Role> findById(@PathVariable Long id){
-        Role obj = service.findById(id);
-        return ResponseEntity.ok().body(obj);
+    public ResponseEntity<RoleDetailResponse> findById(@PathVariable Long id){
+        Role role = service.findById(id);
+        RoleDetailResponse response = mapper.toRolesDto(role);
+        return ResponseEntity.ok().body(response);
     }
 }

@@ -1,6 +1,8 @@
 package com.wipro.api.users.list;
 
-import com.wipro.api.users.common.UsersDto;
+import lombok.Data;
 
-public class UsersListResponse extends UsersDto {
+@Data
+public class UsersListResponse {
+    private Long id;
 }

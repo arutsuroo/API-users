@@ -18,7 +18,6 @@ public class UsersUpdateService {
         User entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
         updateData(entity, obj);
         return repository.save(entity);
-
     }
 
     public void updateData(User entity, User obj){

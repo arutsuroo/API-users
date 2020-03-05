@@ -1,11 +1,7 @@
 package com.wipro.api.users.update;
 
-import com.wipro.api.users.common.UsersDto;
-import com.wipro.api.users.common.UsersMapper.UsersMapper;
 import com.wipro.domain.users.User;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,12 +13,13 @@ public class UsersUpdateRestController {
     private UsersUpdateService service;
 
     @Autowired
-    private UsersMapper usersMapper;
+    private UsersUpdateMapper usersMapper;
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> update(@PathVariable("id") Long id, @RequestBody UsersDto obj){
-        User user = service.update(id, usersMapper.fromDto(obj));
-        return ResponseEntity.ok().body(user);
+    public ResponseEntity<UsersUpdateResponse> update(@PathVariable("id") Long id, @RequestBody UsersUpdateRequest obj){
+        User user = service.update(id, usersMapper.toUsers(obj));
+        UsersUpdateResponse response = usersMapper.toUsersDto(user);
+        return ResponseEntity.ok().body(response);
     }
 }
 
