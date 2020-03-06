@@ -2,6 +2,8 @@ package com.wipro.api.roles.create;
 
 import com.wipro.domain.role.Role;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,9 +22,10 @@ public class RoleCreateController {
     private RoleCreateMapper mapper;
 
     @PostMapping
-    public RoleCreateResponse insert(@Valid @RequestBody RoleCreateRequest obj){
+    public ResponseEntity<RoleCreateResponse> insert(@Valid @RequestBody RoleCreateRequest obj){
         Role role = service.insert(mapper.toRoles(obj));
-       return mapper.toRoleDto(role);
+        RoleCreateResponse response = mapper.toRoleDto(role);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
 }

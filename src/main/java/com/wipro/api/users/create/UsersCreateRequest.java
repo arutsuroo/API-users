@@ -13,17 +13,17 @@ import java.time.LocalDate;
 public class UsersCreateRequest {
 
     @Size(min = 2, message = "Username should be at least 2 characters")
-    @ApiModelProperty(example = "Alex", notes = "Username should have at least 2 characters.")
+    @ApiModelProperty(example = "theDoctor", notes = "Username should have at least 2 characters.")
     @NotNull
     private String userName;
 
     @Size(min = 2, message = "First Name should be at least 2 characters")
-    @ApiModelProperty(example = "Alex", notes = "First Name should have at least 2 characters.")
+    @ApiModelProperty(example = "John", notes = "First Name should have at least 2 characters.")
     @NotNull
     private String firstName;
 
     @Size(min = 2, message = "Last Name should be at least 2 characters")
-    @ApiModelProperty(example = "Villanova", notes = "Last Name should have at least 2 characters.")
+    @ApiModelProperty(example = "Smith", notes = "Last Name should have at least 2 characters.")
     @NotNull
     private String lastName;
 
@@ -34,7 +34,7 @@ public class UsersCreateRequest {
 
     @NotNull
     @Email
-    @ApiModelProperty(example = "email@email.com", notes = "Email format invalid")
+    @ApiModelProperty(example = "doctor@tardis.com", notes = "Email format invalid")
     private String email;
 
     private int idRole;

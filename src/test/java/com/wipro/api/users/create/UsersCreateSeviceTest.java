@@ -7,10 +7,7 @@ import com.wipro.domain.users.UserRepository;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -28,8 +25,8 @@ class UsersCreateSeviceTest {
     public void test_insert_without_role_success(){
         new TestSpec()
                 .given_use_default_user()
-                .when_repository_return_user()
-                .then_call_insert()
+                .given_repository_return_user()
+                .when_call_insert()
                 .then_user_not_null();
     }
 
@@ -37,8 +34,8 @@ class UsersCreateSeviceTest {
     public void test_insert_with_role_null_success(){
         new TestSpec()
                 .given_use_default_user()
-                .when_repository_return_user()
-                .then_call_insert()
+                .given_repository_return_user()
+                .when_call_insert()
                 .then_user_not_null();
     }
 
@@ -46,9 +43,9 @@ class UsersCreateSeviceTest {
     public void test_insert_firstName_is_equal_success(){
         new TestSpec()
                 .given_use_default_user()
-                .when_useDefaultUser_setFirstName("Test Name")
-                .when_repository_return_user()
-                .then_call_insert()
+                .given_useDefaultUser_setFirstName("Test Name")
+                .given_repository_return_user()
+                .when_call_insert()
                 .then_user_not_null()
                 .then_user_firstName_matches("Test Name");
     }
@@ -86,17 +83,17 @@ class UsersCreateSeviceTest {
             return this;
         }
 
-        public TestSpec when_useDefaultUser_setFirstName(String firstName) {
+        public TestSpec given_useDefaultUser_setFirstName(String firstName) {
             user.setFirstName(firstName);
             return this;
         }
 
-        public TestSpec when_repository_return_user() {
-            Mockito.when(repository.save(any(User.class))).thenReturn(user);
+        public TestSpec given_repository_return_user() {
+            BDDMockito.given(repository.save(any(User.class))).willReturn(user);
             return this;
         }
 
-        public TestSpec then_call_insert() {
+        public TestSpec when_call_insert() {
             userInserted = usersCreateSevice.insert(user, 1L);
             return this;
         }
