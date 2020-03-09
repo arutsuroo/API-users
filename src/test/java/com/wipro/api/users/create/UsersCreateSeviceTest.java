@@ -20,7 +20,6 @@ import static org.mockito.Mockito.mock;
 @SpringBootTest
 class UsersCreateSeviceTest {
 
-
     @Test
     public void test_insert_without_role_success(){
         new TestSpec()
