@@ -107,32 +107,6 @@ class UsersCreateSeviceTest {
             return this;
         }
 
-        public TestSpec test_insert_user_null(){
-            try{
-                usersCreateSevice.insert(null, 1L);
-            }
-            catch (NullPointerException e){
-                Assert.assertNotNull(e);
-            }
-            return this;
-        }
-
-        public TestSpec test_insert_with_role_success(){
-            Role role = getRoleMock();
-            Mockito.when(service.findById(any(long.class))).thenReturn(role);
-            User user = this.user;
-            Mockito.when(repository.save(any(User.class))).thenReturn(user);
-
-            User userInserted = usersCreateSevice.insert(user, 1L);
-
-            Assert.assertNotNull(userInserted);
-            Assert.assertNotNull(userInserted.getRoles());
-            return this;
-        }
-
-
-
-
     }
 
 }

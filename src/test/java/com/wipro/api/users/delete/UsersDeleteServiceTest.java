@@ -32,7 +32,20 @@ class UsersDeleteServiceTest {
                 .given_use_default_user_set_name()
                 .given_repository_return_user()
                 .when_call_insert()
-                .then_user_not_null();
+                .then_user_not_null()
+                .when_call_delete()
+                .then_delete_was_called();
+    }
+
+    @Test
+    public void test_insert_user_then_delete_fail(){
+        new TestSpec()
+                .given_use_default_user_set_name()
+                .given_repository_return_user()
+                .when_call_insert()
+                .then_user_not_null()
+                .when_call_delete()
+                .then_delete_was_called_with_id_not_found();
     }
 
     private Role getRoleMock() {
@@ -50,11 +63,11 @@ class UsersDeleteServiceTest {
         @InjectMocks
         UsersCreateSevice usersCreateSevice;
 
-        @Mock
+        @InjectMocks
         UsersDeleteService usersDeleteService;
 
         @Mock
-        RoleDetailService service;
+        RoleDetailService roleDetailService;
 
         User user;
         User userInserted;
@@ -64,15 +77,11 @@ class UsersDeleteServiceTest {
         }
 
         public TestSpec given_use_default_user_set_name(){
-
             user = new User();
-
-            user.setId(1L);
             user.setFirstName("First Name");
             user.setLastName("Last Name");
             user.setEmail("email@email.com");
             user.setBirthDate(LocalDate.of(2020, 1, 12));
-
             return this;
         }
 
@@ -83,7 +92,8 @@ class UsersDeleteServiceTest {
 
         public TestSpec when_call_insert() throws IllegalArgumentException{
 
-            User user = this.user;
+            Role role = getRoleMock();
+
             userInserted = usersCreateSevice.insert(user, 1L);
 
             return this;
