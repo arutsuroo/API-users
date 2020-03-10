@@ -1,4 +1,4 @@
-package com.wipro.api.users.delete;
+package com.wipro.api.users.detail;
 
 import com.wipro.api.roles.detail.RoleDetailService;
 import com.wipro.api.users.create.UsersCreateSevice;
@@ -14,7 +14,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.EmptyResultDataAccessException;
 
 import java.time.LocalDate;
 
@@ -24,37 +23,34 @@ import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
-class UsersDeleteServiceTest {
+class UsersDetailServiceTest {
+
 
     @Test
-    public void test_insert_role_then_delete_success(){
+    public void test_insert_user_success_then_find_user(){
         new TestSpec()
                 .given_use_default_user_set_name()
                 .given_repository_return_user()
                 .when_call_insert()
-                .then_user_not_null();
+                .then_user_not_null()
+                .when_call_detail()
+                .then_detail_was_called();
     }
 
-    private Role getRoleMock() {
-        Role role = mock(Role.class);
-        role.setName("Test Role");
-        role.setId(1L);
-        return role;
-    }
 
     class TestSpec {
-
-        @Mock
-        UserRepository repository;
 
         @InjectMocks
         UsersCreateSevice usersCreateSevice;
 
         @Mock
-        UsersDeleteService usersDeleteService;
+        UsersDetailService usersDetailService;
 
         @Mock
-        RoleDetailService service;
+        UserRepository repository;
+
+        @Mock
+        RoleDetailService roleDetailService;
 
         User user;
         User userInserted;
@@ -63,10 +59,16 @@ class UsersDeleteServiceTest {
             MockitoAnnotations.initMocks(this);
         }
 
+        private Role getRoleMock() {
+            Role role = mock(Role.class);
+            role.setName("Test Role");
+            role.setId(1L);
+            return role;
+        }
+
         public TestSpec given_use_default_user_set_name(){
 
             user = new User();
-
             user.setId(1L);
             user.setFirstName("First Name");
             user.setLastName("Last Name");
@@ -82,10 +84,7 @@ class UsersDeleteServiceTest {
         }
 
         public TestSpec when_call_insert() throws IllegalArgumentException{
-
-            User user = this.user;
             userInserted = usersCreateSevice.insert(user, 1L);
-
             return this;
         }
 
@@ -94,21 +93,15 @@ class UsersDeleteServiceTest {
             return this;
         }
 
-        public TestSpec when_call_delete() throws EmptyResultDataAccessException {
-            usersDeleteService.delete(userInserted.getId());
+        public TestSpec when_call_detail(){
+            usersDetailService.findById(userInserted.getId());
             return this;
         }
 
-        public TestSpec then_delete_was_called(){
-            verify(repository).deleteById(userInserted.getId());
+        public TestSpec then_detail_was_called(){
+            verify(usersDetailService).findById(userInserted.getId());
             return this;
         }
-
-        public TestSpec then_delete_was_called_with_id_not_found(){
-            verify(repository).deleteById(null);
-            return this;
-        }
-
     }
 
 }

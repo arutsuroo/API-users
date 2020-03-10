@@ -22,7 +22,7 @@ import static org.mockito.Mockito.verify;
 class RoleDetailServiceTest {
 
     @Test
-    public void test_insert_role_success(){
+    public void test_insert_role_success_then_find_role(){
         new TestSpec()
                 .given_use_default_role_set_name("Admin")
                 .given_repository_return_role()
@@ -32,12 +32,12 @@ class RoleDetailServiceTest {
                 .then_detail_was_called();
     }
 
-    static class TestSpec{
+    class TestSpec{
 
         @InjectMocks
         RoleCreateService roleCreateService;
 
-        @InjectMocks
+        @Mock
         RoleDetailService roleDetailService;
 
         @Mock
@@ -78,10 +78,9 @@ class RoleDetailServiceTest {
         }
 
         public TestSpec then_detail_was_called(){
-            verify(repository).findById(roleInserted.getId());
+            verify(roleDetailService).findById(roleInserted.getId());
             return this;
         }
-
 
 
     }
