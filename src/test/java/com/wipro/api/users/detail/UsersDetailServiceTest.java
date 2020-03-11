@@ -1,107 +1,102 @@
 package com.wipro.api.users.detail;
 
-import com.wipro.api.roles.detail.RoleDetailService;
-import com.wipro.api.users.create.UsersCreateSevice;
-import com.wipro.domain.role.Role;
+import com.wipro.common.exceptions.ResourceNotFoundException;
 import com.wipro.domain.users.User;
 import com.wipro.domain.users.UserRepository;
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
+import static org.mockito.BDDMockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
-@SpringBootTest
 class UsersDetailServiceTest {
 
-
     @Test
-    public void test_insert_user_success_then_find_user(){
+    public void findById_existentId_success() {
         new TestSpec()
-                .given_use_default_user_set_name()
-                .given_repository_return_user()
-                .when_call_insert()
-                .then_user_not_null()
-                .when_call_detail()
-                .then_detail_was_called();
+                .given_UserDetailResques_with_existentId()
+                .given_userRepository_findById_return_validUser()
+                .when_findById()
+                .then_no_exception_thrown()
+                .then_validUserDetailResponse_isReturned();
     }
 
+    @Test
+    public void findById_nonexistentId_error(){
+        new TestSpec()
+                .given_UserDetailResques_with_nonexistentId()
+                .given_userRepository_findById_return_null() // or exception like no data found
+                .when_findById()
+                .then_exception_thrown_with_message("Resource Not Found Exception");
+    }
 
     class TestSpec {
-
-        @InjectMocks
-        UsersCreateSevice usersCreateSevice;
-
-        @Mock
-        UsersDetailService usersDetailService;
 
         @Mock
         UserRepository repository;
 
-        @Mock
-        RoleDetailService roleDetailService;
+        @InjectMocks
+        UsersDetailService service;
 
         User user;
-        User userInserted;
 
         TestSpec(){
             MockitoAnnotations.initMocks(this);
         }
 
-        private Role getRoleMock() {
-            Role role = mock(Role.class);
-            role.setName("Test Role");
-            role.setId(1L);
-            return role;
-        }
-
-        public TestSpec given_use_default_user_set_name(){
-
+        public TestSpec given_UserDetailResques_with_existentId(){
             user = new User();
             user.setId(1L);
             user.setFirstName("First Name");
             user.setLastName("Last Name");
             user.setEmail("email@email.com");
             user.setBirthDate(LocalDate.of(2020, 1, 12));
-
             return this;
         }
 
-        public TestSpec given_repository_return_user() {
-            BDDMockito.given(repository.save(any(User.class))).willReturn(user);
+        public TestSpec given_UserDetailResques_with_nonexistentId(){
+            user = new User();
+            user.setId(1L);
+            user.setFirstName("First Name");
+            user.setLastName("Last Name");
+            user.setEmail("email@email.com");
+            user.setBirthDate(LocalDate.of(2020, 1, 12));
             return this;
         }
 
-        public TestSpec when_call_insert() throws IllegalArgumentException{
-            userInserted = usersCreateSevice.insert(user, 1L);
+        public TestSpec when_findById(){
+            service.findById(user.getId());
             return this;
         }
 
-        public TestSpec then_user_not_null(){
-            Assert.assertNotNull(userInserted);
+        public TestSpec then_no_exception_thrown(){
             return this;
         }
 
-        public TestSpec when_call_detail(){
-            usersDetailService.findById(userInserted.getId());
+        public TestSpec given_userRepository_findById_return_validUser(){
+            given(repository.findById(user.getId())).willReturn(Optional.of(user));
             return this;
         }
 
-        public TestSpec then_detail_was_called(){
-            verify(usersDetailService).findById(userInserted.getId());
+        public TestSpec given_userRepository_findById_return_null(){
+            given(repository.findById(1L)).willReturn(Optional.empty());
+            return this;
+        }
+
+        public TestSpec then_validUserDetailResponse_isReturned(){
+            then(service.findById(user.getId())).should().getId();
+            return this;
+        }
+
+        public TestSpec then_exception_thrown_with_message(String e){
+            fail("Should throw " + e);
             return this;
         }
     }
-
 }
