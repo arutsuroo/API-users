@@ -1,59 +1,28 @@
 package com.wipro.api.users.delete;
 
 import com.wipro.api.roles.detail.RoleDetailService;
-import com.wipro.api.users.create.UsersCreateSevice;
-import com.wipro.domain.role.Role;
+import com.wipro.api.users.create.UsersCreateService;
 import com.wipro.domain.users.User;
 import com.wipro.domain.users.UserRepository;
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.EmptyResultDataAccessException;
-
 import java.time.LocalDate;
-
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
-@SpringBootTest
 class UsersDeleteServiceTest {
 
     @Test
-    public void test_insert_role_then_delete_success(){
+    public void delete_existingId_success(){
         new TestSpec()
-                .given_use_default_user_set_name()
-                .given_repository_return_user()
-                .when_call_insert()
-                .then_user_not_null()
-                .when_call_delete()
-                .then_delete_was_called();
+                .given_UserDeleteService_with_existingId()
+                .given_userRepository_delete_return_validUser()
+                .when_delete()
+                .then_delete_return_success();
     }
 
-    @Test
-    public void test_insert_user_then_delete_fail(){
-        new TestSpec()
-                .given_use_default_user_set_name()
-                .given_repository_return_user()
-                .when_call_insert()
-                .then_user_not_null()
-                .when_call_delete()
-                .then_delete_was_called_with_id_not_found();
-    }
-
-    private Role getRoleMock() {
-        Role role = mock(Role.class);
-        role.setName("Test Role");
-        role.setId(1L);
-        return role;
-    }
 
     class TestSpec {
 
@@ -61,13 +30,13 @@ class UsersDeleteServiceTest {
         UserRepository repository;
 
         @InjectMocks
-        UsersCreateSevice usersCreateSevice;
+        UsersCreateService usersCreateService;
 
-        @InjectMocks
+        @Mock
         UsersDeleteService usersDeleteService;
 
         @Mock
-        RoleDetailService roleDetailService;
+        RoleDetailService service;
 
         User user;
         User userInserted;
@@ -76,8 +45,9 @@ class UsersDeleteServiceTest {
             MockitoAnnotations.initMocks(this);
         }
 
-        public TestSpec given_use_default_user_set_name(){
+        public TestSpec given_UserDeleteService_with_existingId(){
             user = new User();
+            user.setId(1L);
             user.setFirstName("First Name");
             user.setLastName("Last Name");
             user.setEmail("email@email.com");
@@ -85,40 +55,21 @@ class UsersDeleteServiceTest {
             return this;
         }
 
-        public TestSpec given_repository_return_user() {
+        public TestSpec given_userRepository_delete_return_validUser() {
             BDDMockito.given(repository.save(any(User.class))).willReturn(user);
             return this;
         }
 
-        public TestSpec when_call_insert() throws IllegalArgumentException{
-
-            Role role = getRoleMock();
-
-            userInserted = usersCreateSevice.insert(user, 1L);
-
+        public TestSpec when_delete(){
+            User user = this.user;
+            usersDeleteService.delete(1L);
             return this;
         }
 
-        public TestSpec then_user_not_null(){
-            Assert.assertNotNull(userInserted);
+        public TestSpec then_delete_return_success(){
+            //then(userDeleteService.delete(role.getId())).should()
             return this;
         }
-
-        public TestSpec when_call_delete() throws EmptyResultDataAccessException {
-            usersDeleteService.delete(userInserted.getId());
-            return this;
-        }
-
-        public TestSpec then_delete_was_called(){
-            verify(repository).deleteById(userInserted.getId());
-            return this;
-        }
-
-        public TestSpec then_delete_was_called_with_id_not_found(){
-            verify(repository).deleteById(null);
-            return this;
-        }
-
     }
 
 }

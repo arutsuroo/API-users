@@ -7,14 +7,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.Validator;
 
 @RestController
 @RequestMapping(value = "/users")
 public class UsersCreateRestController {
 
     @Autowired
-    private UsersCreateSevice service;
+    private UsersCreateService service;
 
     @Autowired
     private UsersCreateMapper usersMapper;
