@@ -18,7 +18,7 @@ public class RoleUpdateServiceTest {
     public void getOne_existingId_success(){
         new TestSpec()
                 .given_RoleUpdateRequest_with_existingId()
-                .given_roleRepository_findById_return_validUser()
+                .given_roleRepository_findById_return_validRole()
                 .when_save()
                 .then_validRoleUpdateResponse_isReturned();
     }
@@ -47,7 +47,7 @@ public class RoleUpdateServiceTest {
             return this;
         }
 
-        public TestSpec given_roleRepository_findById_return_validUser(){
+        public TestSpec given_roleRepository_findById_return_validRole(){
             given(repository.findById(roleUpdated.getId())).willReturn(Optional.of(role));
             return this;
         }

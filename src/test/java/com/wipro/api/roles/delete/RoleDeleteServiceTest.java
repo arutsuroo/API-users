@@ -3,14 +3,13 @@ package com.wipro.api.roles.delete;
 import com.wipro.api.roles.create.RoleCreateService;
 import com.wipro.domain.role.Role;
 import com.wipro.domain.role.RoleRepository;
-import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.dao.EmptyResultDataAccessException;
+
 
 import java.util.Optional;
 
@@ -28,14 +27,6 @@ class RoleDeleteServiceTest {
                 .then_delete_return_success();
     }
 
-    @Ignore
-    public void delete_nonexisting_error(){
-        new TestSpec()
-                .given_RoleDeleteService_with_nonexistingId()
-                .given_roleRepository_findById_return_null()
-                .when_call_insert()
-                .then_exception_thrown_with_message();
-    }
 
     class TestSpec {
 

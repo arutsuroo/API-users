@@ -30,7 +30,7 @@ class RoleDetailServiceTest {
     }
 
     @Ignore
-    public void test_find_role_is_empty(){
+    public void findById_unexistentId_error(){
         new TestSpec()
                 .given_RoleDetailRequest_with_nonexistentId()
                 .given_roleRepository_findById_return_null()

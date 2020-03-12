@@ -2,7 +2,8 @@ package com.wipro.api.users.update;
 
 import com.wipro.domain.users.User;
 import com.wipro.domain.users.UserRepository;
-import org.junit.Test;
+import org.junit.Ignore;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -16,12 +17,12 @@ import static org.mockito.BDDMockito.given;
 public class UsersUpdateServiceTest {
 
     @Test
-    public void test_update_user_success(){
+    public void getOne_existingId_success(){
         new TestSpec()
-                .given_user_stored_in_base()
-                .given_user_with_email()
-                .when_call_update()
-                .then_update_was_done();
+                .given_UsersUpdateRequest_with_existingId()
+                .given_userRepository_findById_return_validUser()
+                .when_save()
+                .then_validUsersUpdateResponse_isReturned();
     }
 
     class TestSpec {
@@ -40,7 +41,7 @@ public class UsersUpdateServiceTest {
             MockitoAnnotations.initMocks(this);
         }
 
-        public TestSpec given_user_stored_in_base(){
+        public TestSpec given_UsersUpdateRequest_with_existingId(){
             user = new User();
             user.setId(1L);
             user.setFirstName("First Name");
@@ -51,19 +52,19 @@ public class UsersUpdateServiceTest {
             return this;
         }
 
-        public TestSpec given_user_with_email(){
+        public TestSpec given_userRepository_findById_return_validUser(){
             userEmail = new User();
             userEmail.setId(12L);
             userEmail.setEmail("joao@email.com");
             return this;
         }
 
-        public TestSpec when_call_update(){
+        public TestSpec when_save(){
             userUpdated = service.update(1L, userEmail);
             return this;
         }
 
-        public TestSpec then_update_was_done(){
+        public TestSpec then_validUsersUpdateResponse_isReturned(){
             assertThat(userUpdated.getEmail()).isEqualTo(userEmail.getEmail());
             return this;
         }

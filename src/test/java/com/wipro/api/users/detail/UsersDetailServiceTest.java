@@ -20,7 +20,7 @@ import static org.mockito.BDDMockito.*;
 
 class UsersDetailServiceTest {
 
-    @Ignore
+    @Test
     public void findById_existentId_success() {
         new TestSpec()
                 .given_UserDetailRequest_with_existentId()
@@ -30,7 +30,7 @@ class UsersDetailServiceTest {
                 .then_validUserDetailResponse_isReturned();
     }
 
-    @Ignore
+    @Test
     public void findById_nonexistentId_error(){
         new TestSpec()
                 .given_UserDetailRequest_with_nonexistentId()
@@ -49,6 +49,7 @@ class UsersDetailServiceTest {
 
         User user;
         User userDetail;
+
 
         TestSpec(){
             MockitoAnnotations.initMocks(this);
@@ -75,6 +76,7 @@ class UsersDetailServiceTest {
 
         public TestSpec when_findById(){
             userDetail = service.findById(user.getId());
+            //try catch
             Exception exception = assertThrows(ResourceNotFoundException.class, ()->{ Integer.parseInt("1a");});
             String expectedMessage = "Resource not found. Id " + user.getId();
             String actualMessage = exception.getMessage();
@@ -98,7 +100,7 @@ class UsersDetailServiceTest {
         }
 
         public TestSpec then_validUserDetailResponse_isReturned(){
-            then(service.findById(user.getId())).should().getId();
+            //then(service.)
             return this;
         }
 

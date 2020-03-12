@@ -5,12 +5,9 @@ import com.wipro.domain.role.RoleRepository;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
-
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import static org.mockito.Matchers.any;
 
 class RoleCreateServiceTest {
 
@@ -61,7 +58,7 @@ class RoleCreateServiceTest {
         }
 
         public TestSpec given_roleRepository_save_return_validRole(){
-            BDDMockito.given(repository.save(any(Role.class))).willReturn(role);
+            BDDMockito.given(repository.save(this.role)).willReturn(role);
             return this;
         }
 

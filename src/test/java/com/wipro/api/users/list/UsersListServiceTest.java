@@ -2,23 +2,19 @@ package com.wipro.api.users.list;
 
 import com.wipro.domain.users.UserRepository;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
-@SpringBootTest
+
 public class UsersListServiceTest {
 
     @Test
-    public void test_list_user_success_and_list_is_not_null(){
+    public void findAll_success(){
         new TestSpec()
-                .when_call_list()
-                .then_list_was_called();
+                .when_findAll()
+                .then_validUsersListResponse_isReturned();
     }
 
 
@@ -34,12 +30,12 @@ public class UsersListServiceTest {
             MockitoAnnotations.initMocks(this);
         }
 
-        public TestSpec when_call_list(){
+        public TestSpec when_findAll(){
              usersListService.findAll();
              return this;
         }
 
-        public TestSpec then_list_was_called(){
+        public TestSpec then_validUsersListResponse_isReturned(){
             verify(usersListService).findAll();
             return this;
         }
