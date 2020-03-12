@@ -2,43 +2,56 @@ package com.wipro.api.roles.create;
 
 import com.wipro.domain.role.Role;
 import com.wipro.domain.role.RoleRepository;
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.validation.ConstraintViolation;
+import java.util.Set;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
+@RunWith(SpringRunner.class)
+@ActiveProfiles("test")
+@SpringBootTest
 class RoleCreateServiceTest {
 
     @Test
-    public void save_existingId_success(){
+    public void save_existingId_success() throws Exception{
         new TestSpec()
                 .given_RoleCreateRequest_with_existingId()
                 .given_roleRepository_save_return_validRole()
                 .when_save()
-                .then_ValidRoleCreateResponse_isReturned();
+                .then_exception_notThrown()
+                .then_no_validation_errors();
     }
 
     @Test
-    public void save_nonexistingId_error(){
+    public void save_nonexistingId_fail() throws Exception {
         new TestSpec()
                 .given_RoleCreateRequest_with_nonexistingId()
                 .given_roleRepository_save_return_validRole()
                 .when_save()
-                .then_role_is_null();
+                .then_exception_notThrown()
+                .then_validation_fails_with_message("NullPointerException");
     }
 
     static class TestSpec {
 
-        @InjectMocks
+        Role role;
+        Exception exception;
+        private Set<ConstraintViolation<Role>> violations;
+
+        @Mock
         RoleCreateService roleCreateService;
 
         @Mock
         RoleRepository repository;
-
-        Role role;
-        Role roleInserted;
 
         TestSpec(){
             MockitoAnnotations.initMocks(this);
@@ -62,21 +75,38 @@ class RoleCreateServiceTest {
             return this;
         }
 
-        public TestSpec when_save() throws IllegalArgumentException{
-            roleInserted = roleCreateService.insert(role);
+        public TestSpec then_exception_notThrown() throws Exception {
+            if (exception != null) {
+                throw exception;
+            }
             return this;
         }
 
-        public TestSpec then_ValidRoleCreateResponse_isReturned(){
-            Assert.assertNotNull(roleInserted);
+        public TestSpec then_exception_thrown() {
+            assertThat(exception).isNotNull();
             return this;
         }
 
-        public TestSpec then_role_is_null(){
-            Assert.assertNull(roleInserted.getId());
+        public TestSpec when_save(){
+            try {
+                roleCreateService.insert(role);
+            } catch (Exception e){
+                this.exception = e;
+            }
+
             return this;
         }
 
+        public TestSpec then_no_validation_errors(){
+            assertThat(violations.size()).isEqualTo(0);
+            return this;
+        }
+
+        public TestSpec then_validation_fails_with_message(String msg) {
+            violations.forEach(System.out::println);
+            assertThat(violations).isInstanceOf(NullPointerException.class);
+            return this;
+        }
     }
 
 }

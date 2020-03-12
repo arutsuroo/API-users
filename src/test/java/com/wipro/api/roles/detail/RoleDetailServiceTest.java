@@ -3,24 +3,26 @@ package com.wipro.api.roles.detail;
 import com.wipro.common.exceptions.ResourceNotFoundException;
 import com.wipro.domain.role.Role;
 import com.wipro.domain.role.RoleRepository;
-import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import java.util.Optional;
 
+import javax.validation.ConstraintViolation;
+import java.util.Optional;
+import java.util.Set;
+
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
 
 class RoleDetailServiceTest {
 
-    @Ignore
-    public void findById_existentId_success(){
+    @Test
+    public void findById_existentId_success() throws Exception{
         new TestSpec()
                 .given_RoleDetailRequest_with_existentId()
                 .given_roleRepository_findById_return_validRole()
@@ -29,25 +31,28 @@ class RoleDetailServiceTest {
                 .then_validRoleDetailResponse_isReturned();
     }
 
-    @Ignore
-    public void findById_unexistentId_error(){
+    @Test
+    public void findById_unexistentId_error() throws Exception{
         new TestSpec()
                 .given_RoleDetailRequest_with_nonexistentId()
                 .given_roleRepository_findById_return_null()
                 .when_findById()
-                .then_exception_thrown_with_message("Resource Not Found Exception");
+                .then_exception_thrown()
+                .then_validation_fails_with_message("Resource Not Found Exception");
     }
 
     class TestSpec{
+
+        Role role;
+        Role roleDetail;
+        Exception exception;
+        private Set<ConstraintViolation<Role>> violations;
 
         @InjectMocks
         RoleDetailService roleDetailService;
 
         @Mock
         RoleRepository repository;
-
-        Role role;
-        Role roleDetail;
 
         TestSpec(){
             MockitoAnnotations.initMocks(this);
@@ -72,21 +77,17 @@ class RoleDetailServiceTest {
         }
 
         public TestSpec when_findById(){
-            roleDetail = roleDetailService.findById(role.getId());
-            Exception exception = assertThrows(ResourceNotFoundException.class, ()->{ Integer.parseInt("1a");});
-            String expectedMessage = "Resource not found. Id " + role.getId();
-            String actualMessage = exception.getMessage();
+            try {
+                roleDetail = roleDetailService.findById(role.getId());
+            } catch (Exception e){
+                this.exception = e;
+            }
 
-            assertTrue(actualMessage.contains(expectedMessage));
             return this;
         }
 
         public TestSpec then_no_exception_thrown(){
-            return this;
-        }
-
-        public TestSpec then_validRoleDetailResponse_isReturned(){
-            then(roleDetailService.findById(role.getId())).should().getId();
+            assertThat(violations.size()).isEqualTo(0);
             return this;
         }
 
@@ -95,8 +96,20 @@ class RoleDetailServiceTest {
             return this;
         }
 
-        public TestSpec then_exception_thrown_with_message(String e){
-            fail("Should throw " + e);
+        public TestSpec then_exception_thrown(){
+            assertThat(exception).isInstanceOf(NullPointerException.class);
+            return this;
+        }
+
+        public TestSpec then_validRoleDetailResponse_isReturned() {
+            assertThat(roleDetail).isNotNull();
+            assertThat(roleDetail).isInstanceOf(Role.class);
+            return this;
+        }
+
+        public TestSpec then_validation_fails_with_message(String msg) {
+            violations.forEach(System.out::println);
+            assertThat(violations).isInstanceOf(ResourceNotFoundException.class);
             return this;
         }
 

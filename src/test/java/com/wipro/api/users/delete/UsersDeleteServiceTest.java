@@ -4,7 +4,6 @@ import com.wipro.api.roles.detail.RoleDetailService;
 import com.wipro.api.users.create.UsersCreateService;
 import com.wipro.domain.users.User;
 import com.wipro.domain.users.UserRepository;
-import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
@@ -15,15 +14,14 @@ import static org.mockito.Matchers.any;
 
 class UsersDeleteServiceTest {
 
-    @Ignore
+    @Test
     public void delete_existingId_success(){
         new TestSpec()
                 .given_UserDeleteService_with_existingId()
                 .given_userRepository_delete_return_validUser()
                 .when_delete()
-                .then_delete_return_success();
+                .then_no_delete_errors();
     }
-
 
     class TestSpec {
 
@@ -65,7 +63,7 @@ class UsersDeleteServiceTest {
             return this;
         }
 
-        public TestSpec then_delete_return_success(){
+        public TestSpec then_no_delete_errors(){
             //then(userDeleteService.delete(role.getId())).should()
             return this;
         }

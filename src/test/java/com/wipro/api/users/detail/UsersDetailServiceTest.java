@@ -1,6 +1,7 @@
 package com.wipro.api.users.detail;
 
 import com.wipro.common.exceptions.ResourceNotFoundException;
+
 import com.wipro.domain.users.User;
 import com.wipro.domain.users.UserRepository;
 import org.junit.Ignore;
@@ -9,10 +10,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import javax.validation.ConstraintViolation;
 import java.time.LocalDate;
 import java.util.Optional;
+import java.util.Set;
 
 
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -21,7 +25,7 @@ import static org.mockito.BDDMockito.*;
 class UsersDetailServiceTest {
 
     @Test
-    public void findById_existentId_success() {
+    public void findById_existentId_success() throws Exception{
         new TestSpec()
                 .given_UserDetailRequest_with_existentId()
                 .given_userRepository_findById_return_validUser()
@@ -31,7 +35,7 @@ class UsersDetailServiceTest {
     }
 
     @Test
-    public void findById_nonexistentId_error(){
+    public void findById_nonexistentId_error() throws Exception{
         new TestSpec()
                 .given_UserDetailRequest_with_nonexistentId()
                 .given_userRepository_findById_return_null() // or exception like no data found
@@ -49,7 +53,8 @@ class UsersDetailServiceTest {
 
         User user;
         User userDetail;
-
+        Exception exception;
+        private Set<ConstraintViolation<User>> violations;
 
         TestSpec(){
             MockitoAnnotations.initMocks(this);
@@ -75,17 +80,16 @@ class UsersDetailServiceTest {
         }
 
         public TestSpec when_findById(){
-            userDetail = service.findById(user.getId());
-            //try catch
-            Exception exception = assertThrows(ResourceNotFoundException.class, ()->{ Integer.parseInt("1a");});
-            String expectedMessage = "Resource not found. Id " + user.getId();
-            String actualMessage = exception.getMessage();
-
-            assertTrue(actualMessage.contains(expectedMessage));
+            try{
+                userDetail = service.findById(user.getId());
+            } catch (Exception e){
+                this.exception = e;
+            }
             return this;
         }
 
         public TestSpec then_no_exception_thrown(){
+            assertThat(violations.size()).isEqualTo(0);
             return this;
         }
 
@@ -100,7 +104,8 @@ class UsersDetailServiceTest {
         }
 
         public TestSpec then_validUserDetailResponse_isReturned(){
-            //then(service.)
+            assertThat(userDetail).isNotNull();
+            assertThat(userDetail).isInstanceOf(User.class);
             return this;
         }
 

@@ -3,13 +3,11 @@ package com.wipro.api.roles.delete;
 import com.wipro.api.roles.create.RoleCreateService;
 import com.wipro.domain.role.Role;
 import com.wipro.domain.role.RoleRepository;
-import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
 
 import java.util.Optional;
 
@@ -18,15 +16,14 @@ import static org.mockito.Mockito.verify;
 
 class RoleDeleteServiceTest {
 
-    @Ignore
+    @Test
     public void delete_existingId_success(){
         new TestSpec()
                 .given_RoleDeleteService_with_existingId()
                 .given_roleRepository_findById_return_validRole()
                 .when_delete()
-                .then_delete_return_success();
+                .then_no_delete_errors();
     }
-
 
     class TestSpec {
 
@@ -75,7 +72,7 @@ class RoleDeleteServiceTest {
         }
 
 
-        public TestSpec then_delete_return_success(){
+        public TestSpec then_no_delete_errors(){
             //then(roleDeleteService.delete(role.getId())).should()
             return this;
         }
@@ -86,7 +83,7 @@ class RoleDeleteServiceTest {
         }
 
         public TestSpec when_delete(){
-            roleDeleteService.delete(roleInserted.getId());
+            roleDeleteService.delete(role.getId());
             return this;
         }
 
