@@ -38,7 +38,7 @@ public class User {
     @NotNull
     private String email;
 
-    @ManyToOne()
+    @ManyToOne
     private Role roles;
 
     @Override

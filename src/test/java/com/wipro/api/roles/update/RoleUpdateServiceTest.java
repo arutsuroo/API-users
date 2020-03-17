@@ -1,29 +1,31 @@
 package com.wipro.api.roles.update;
 
-import com.wipro.common.exceptions.ResourceNotFoundException;
 import com.wipro.domain.role.Role;
 import com.wipro.domain.role.RoleRepository;
-import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.validation.ConstraintViolation;
 import java.util.Optional;
-import java.util.Set;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
+@RunWith(SpringRunner.class)
+@ActiveProfiles("test")
+@SpringBootTest
 public class RoleUpdateServiceTest {
 
     @Test
     public void getOne_existingId_success(){
         new TestSpec()
-                .given_RoleUpdateRequest_with_existingId()
-                .given_roleRepository_findById_return_validRole()
-                .given_role_with_new_name()
+                .given_RoleUpdateRequest_with_existingId_toUpdate()
+                .given_roleRepository_findById_return_valid_role()
                 .when_save()
                 .then_validRoleUpdateResponse_isReturned();
     }
@@ -35,7 +37,6 @@ public class RoleUpdateServiceTest {
         Role roleName;
         Role roleUpdated;
         Exception exception;
-        private Set<ConstraintViolation<Role>> violations;
 
         @InjectMocks
         RoleUpdateService service;
@@ -48,28 +49,26 @@ public class RoleUpdateServiceTest {
             MockitoAnnotations.initMocks(this);
         }
 
-        public TestSpec given_RoleUpdateRequest_with_existingId(){
+        public TestSpec given_RoleUpdateRequest_with_existingId_toUpdate(){
+            roleName = new Role();
+            roleName.setId(1L);
+            roleName.setName("Admin");
+            return this;
+        }
+
+        public TestSpec given_roleRepository_findById_return_valid_role(){
             role = new Role();
             role.setId(1L);
-            role.setName("Admin");
+            role.setName("Developer");
+            given(repository.findById(1L)).willReturn(Optional.of(role));
+            given(repository.save(role)).willReturn(role);
             return this;
         }
 
-        public TestSpec given_roleRepository_findById_return_validRole(){
-            given(repository.findById(roleUpdated.getId())).willReturn(Optional.of(role));
-            return this;
-        }
-
-        public TestSpec given_role_with_new_name(){
-            roleName = new Role();
-            roleName.setName("Developer");
-            return this;
-        }
-
-        public TestSpec when_save(){
+        public TestSpec when_save() {
             try {
-                roleUpdated = service.update(1L, roleName);
-            } catch (ResourceNotFoundException e){
+                roleUpdated = service.update(1L, role);
+            } catch (Exception e){
                 this.exception = e;
             }
             return this;
@@ -77,7 +76,7 @@ public class RoleUpdateServiceTest {
 
         public TestSpec then_validRoleUpdateResponse_isReturned(){
             assertThat(roleUpdated).isNotNull();
-            assertThat(roleUpdated.getName()).isEqualTo(roleName.getName());
+            assertThat(roleUpdated.getName()).isNotEqualTo(roleName.getName());
             return this;
         }
 

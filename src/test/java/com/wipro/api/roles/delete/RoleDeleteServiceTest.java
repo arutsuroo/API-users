@@ -1,19 +1,24 @@
 package com.wipro.api.roles.delete;
 
-import com.wipro.api.roles.create.RoleCreateService;
 import com.wipro.domain.role.Role;
 import com.wipro.domain.role.RoleRepository;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Optional;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 
+@RunWith(SpringRunner.class)
+@ActiveProfiles("test")
+@SpringBootTest
 class RoleDeleteServiceTest {
 
     @Test
@@ -25,19 +30,16 @@ class RoleDeleteServiceTest {
                 .then_no_delete_errors();
     }
 
+
     class TestSpec {
 
         @Mock
         RoleRepository repository;
 
         @InjectMocks
-        RoleCreateService roleCreateService;
-
-        @InjectMocks
         RoleDeleteService roleDeleteService;
 
         Role role;
-        Role roleInserted;
 
         TestSpec(){
             MockitoAnnotations.initMocks(this);
@@ -50,35 +52,8 @@ class RoleDeleteServiceTest {
             return this;
         }
 
-        public TestSpec given_RoleDeleteService_with_nonexistingId(){
-            role = new Role();
-            role.setName("Admin");
-            return this;
-        }
-
         public TestSpec given_roleRepository_findById_return_validRole(){
             BDDMockito.given(repository.save(any(Role.class))).willReturn(role);
-            return this;
-        }
-
-        public TestSpec given_roleRepository_findById_return_null(){
-            BDDMockito.given(repository.findById(1L)).willReturn(Optional.empty());
-            return this;
-        }
-
-        public TestSpec when_call_insert() throws IllegalArgumentException{
-            roleInserted = roleCreateService.insert(role);
-            return this;
-        }
-
-
-        public TestSpec then_no_delete_errors(){
-            //then(roleDeleteService.delete(role.getId())).should()
-            return this;
-        }
-
-        public TestSpec then_exception_thrown_with_message(){
-            verify(repository).deleteById(null);
             return this;
         }
 
@@ -86,6 +61,13 @@ class RoleDeleteServiceTest {
             roleDeleteService.delete(role.getId());
             return this;
         }
+
+        public TestSpec then_no_delete_errors(){
+            verify(repository).deleteById(role.getId());
+            return this;
+        }
+
+
 
     }
 

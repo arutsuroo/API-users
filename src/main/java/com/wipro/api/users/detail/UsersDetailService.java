@@ -14,7 +14,7 @@ public class UsersDetailService {
     @Autowired
     private UserRepository repository;
 
-    public User findById(Long id) {
+    public User findById(Long id) throws ResourceNotFoundException{
         Optional<User> obj = repository.findById(id);
         return obj.orElseThrow(() -> new ResourceNotFoundException(id));
     }

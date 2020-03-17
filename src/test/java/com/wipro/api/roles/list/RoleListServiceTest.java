@@ -2,19 +2,15 @@ package com.wipro.api.roles.list;
 
 import com.wipro.domain.role.Role;
 import com.wipro.domain.role.RoleRepository;
-import lombok.Setter;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import javax.validation.ConstraintViolation;
 import java.util.Arrays;
-import java.util.Set;
+import java.util.List;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.mockito.BDDMockito.*;
@@ -32,11 +28,10 @@ public class RoleListServiceTest {
                 .then_validRoleListResponse_isReturned();
     }
 
-
     class TestSpec {
 
         Exception exception;
-        private Set<ConstraintViolation<Role>> violations;
+        List<Role> role;
 
         @Mock
         RoleListService roleListService;
@@ -55,7 +50,7 @@ public class RoleListServiceTest {
 
         public TestSpec when_findAll(){
             try {
-                roleListService.findAll();
+                role = roleListService.findAll();
             } catch (Exception e){
                 this.exception = e;
             }
@@ -63,7 +58,7 @@ public class RoleListServiceTest {
         }
 
         public TestSpec then_validRoleListResponse_isReturned(){
-            assertThat(violations.size()).isEqualTo(0);
+            assertThat(role).isNotNull();
             return this;
         }
 

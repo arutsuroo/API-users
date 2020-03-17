@@ -1,17 +1,24 @@
 package com.wipro.api.users.delete;
 
 import com.wipro.api.roles.detail.RoleDetailService;
-import com.wipro.api.users.create.UsersCreateService;
 import com.wipro.domain.users.User;
 import com.wipro.domain.users.UserRepository;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringRunner;
+
 import java.time.LocalDate;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.verify;
 
+@RunWith(SpringRunner.class)
+@ActiveProfiles("test")
+@SpringBootTest
 class UsersDeleteServiceTest {
 
     @Test
@@ -27,9 +34,6 @@ class UsersDeleteServiceTest {
 
         @Mock
         UserRepository repository;
-
-        @InjectMocks
-        UsersCreateService usersCreateService;
 
         @Mock
         UsersDeleteService usersDeleteService;
@@ -50,6 +54,7 @@ class UsersDeleteServiceTest {
             user.setLastName("Last Name");
             user.setEmail("email@email.com");
             user.setBirthDate(LocalDate.of(2020, 1, 12));
+            user.setRoles(null);
             return this;
         }
 
@@ -59,12 +64,12 @@ class UsersDeleteServiceTest {
         }
 
         public TestSpec when_delete(){
-            usersDeleteService.delete(1L);
+            usersDeleteService.delete(user.getId());
             return this;
         }
 
         public TestSpec then_no_delete_errors(){
-            //then(userDeleteService.delete(role.getId())).should()
+            verify(usersDeleteService).delete(user.getId());
             return this;
         }
     }

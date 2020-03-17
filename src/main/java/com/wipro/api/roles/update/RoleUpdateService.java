@@ -15,16 +15,12 @@ public class RoleUpdateService {
     private RoleRepository repository;
 
     public Role update(Long id, Role obj){
-        try {
-            Role entity = repository.getOne(id);
-            updateData(entity, obj);
-            return repository.save(entity);
-        } catch (EntityNotFoundException e){
-            throw new ResourceNotFoundException(id);
-        }
+        Role entity = repository.findById(id).orElseThrow(()-> new ResourceNotFoundException(id));
+        updateData(entity, obj);
+        return repository.save(entity);
     }
 
     public void updateData(Role entity, Role obj){
-        entity.setName(obj.getName());
+            entity.setName(obj.getName());
     }
 }

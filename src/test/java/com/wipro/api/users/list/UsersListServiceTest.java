@@ -2,7 +2,6 @@ package com.wipro.api.users.list;
 
 import com.wipro.domain.users.User;
 import com.wipro.domain.users.UserRepository;
-import lombok.Setter;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -11,13 +10,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.validation.ConstraintViolation;
 import java.util.Arrays;
-import java.util.Set;
+import java.util.List;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
 
 @RunWith(SpringRunner.class)
 @ActiveProfiles("test")
@@ -34,8 +31,8 @@ public class UsersListServiceTest {
 
     class TestSpec {
 
+        List<User> user;
         Exception exception;
-        private Set<ConstraintViolation<User>> violations;
 
         @Mock
         UsersListService usersListService;
@@ -53,17 +50,17 @@ public class UsersListServiceTest {
         }
 
         public TestSpec when_findAll(){
-            usersListService.findAll();
-            return this;
-        }
-
-        public TestSpec then_validUsersListResponse_isReturned(){
             try {
-                assertThat(violations.size()).isEqualTo(0);
+                user = usersListService.findAll();
             } catch (Exception e){
                 this.exception = e;
             }
             return this;
+        }
+
+        public TestSpec then_validUsersListResponse_isReturned(){
+           assertNotNull(user);
+           return this;
         }
     }
 }
